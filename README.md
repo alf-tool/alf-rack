@@ -10,3 +10,8 @@ A collection of Rack middlewares for using Alf in web applications.
 
 * http://github.com/blambeau/alf
 * http://github.com/blambeau/alf-rack
+
+## Connect
+
+The `Connect` middleware opens a database connection and make it available
+under Alf::Rack::Connect::KEY in the rack environment. See Alf::Rack::Connect.
