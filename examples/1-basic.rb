@@ -1,9 +1,9 @@
-require 'alf-rack'
+require_relative '0-commons'
 require 'sinatra/base'
 
 # This example illustrates a basic usage of Alf::Rack for serving content
 # with Alf in a web application context.
-class App < Sinatra::Base
+class BasicApp < Sinatra::Base
   include Alf::Rack::Helpers
 
   # We explicitely set the supported media types using `Rack::Accept`
@@ -17,13 +17,13 @@ class App < Sinatra::Base
     context.media_types = Alf::Rack::Response.supported_media_types
   end
 
-  # Let connect to the suppliers and parts examplar that comes with Alf.
+  # Let connect to the suppliers and parts examplar that comes with Alf::Test.
   #
   # This sets a config object on the Rack env object, under
   # Alf::Rack::Connect::CONFIG_KEY. That config object will have an open
   # connection at request time.
   use Alf::Rack::Connect do |cfg|
-    cfg.database = Alf.examples_adapter
+    cfg.database = Alf::Test::Sap.adapter(:sqlite)
   end
 
   # Let serve the list of suppliers
@@ -47,15 +47,13 @@ class App < Sinatra::Base
   disable :show_exceptions
 end
 
-### Test time!
+### Test time! ###############################################################
 
-require 'rspec'
-require 'rack/test'
-describe App do
+describe BasicApp do
   include Rack::Test::Methods
 
   def app
-    App
+    BasicApp
   end
 
   subject{ get('/suppliers', {}, env) }

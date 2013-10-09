@@ -1,11 +1,28 @@
 GIT
   remote: git://github.com/alf-tool/alf-core.git
-  revision: 1f1dd20438f946af7e1460238a4d5773ccab01ad
+  revision: 0b8a9151418bf5cfd3d927554d6f7254e8fd8e8c
   specs:
     alf-core (0.15.0)
       domain (~> 1.0)
       myrrha (~> 3.0)
       path (~> 1.3)
+      sexpr (~> 0.6.0)
+
+GIT
+  remote: git://github.com/alf-tool/alf-sequel.git
+  revision: 0e13b25600e62257823588c5b6f466c76db5115f
+  specs:
+    alf-sequel (0.15.0)
+      alf-core (~> 0.15.0)
+      alf-sql (~> 0.15.0)
+      sequel (~> 4.2)
+
+GIT
+  remote: git://github.com/alf-tool/alf-sql.git
+  revision: fadecfa0b63220113adbe83174b486781be72405
+  specs:
+    alf-sql (0.15.0)
+      alf-core (~> 0.15.0)
       sexpr (~> 0.6.0)
 
 GIT
@@ -40,11 +57,14 @@ GEM
     rspec-expectations (2.14.3)
       diff-lcs (>= 1.1.3, < 2.0)
     rspec-mocks (2.14.3)
+    ruby_cop (1.0.5)
+    sequel (4.2.0)
     sexpr (0.6.0)
     sinatra (1.4.3)
       rack (~> 1.4)
       rack-protection (~> 1.4)
       tilt (~> 1.3, >= 1.3.4)
+    sqlite3 (1.3.8)
     tilt (1.4.1)
 
 PLATFORMS
@@ -52,11 +72,17 @@ PLATFORMS
 
 DEPENDENCIES
   alf-core!
+  alf-sequel!
+  alf-sql!
   alf-test!
+  jdbc-sqlite3 (~> 3.7)
   path (~> 1.3)
   rack (~> 1.5)
   rack-accept (~> 0.4.5)
   rack-test (~> 0.6.2)
   rake (~> 10.1)
   rspec (~> 2.14)
+  ruby_cop (~> 1.0)
+  sequel (~> 4.2)
   sinatra (~> 1.4)
+  sqlite3 (~> 1.3)

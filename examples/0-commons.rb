@@ -1,0 +1,6 @@
+require 'alf-rack'
+require 'alf-test'
+require 'alf-sequel'
+require 'sequel'
+require 'rspec'
+require 'rack/test'
