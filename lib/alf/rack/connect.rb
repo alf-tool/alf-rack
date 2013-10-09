@@ -13,18 +13,19 @@ module Alf
     # end
     #
     # get '/' do
-    #   conn = env[Alf::Rack::Connect::KEY]
-    #   # => Alf::Database::Connection
+    #   # the configuration object (a dup of what has been seen above)
+    #   config = env[Alf::Rack::Connect::CONFIG_KEY]
     #
-    #   # do as usual
-    #   conn.query{ ... }
+    #   # the config object is connected
+    #   connection = config.connection
+    #   # => Alf::Database::Connection
     #
     #   # ...
     # end
     # ```
     class Connect
 
-      KEY = "ALF_RACK_CONNECTION".freeze
+      CONFIG_KEY = "ALF_RACK_CONFIG".freeze
 
       def initialize(app, config = Config.new)
         @app    = app
@@ -33,7 +34,7 @@ module Alf
       end
 
       def call(env)
-        env[KEY] = cfg = @config.dup
+        env[CONFIG_KEY] = cfg = @config.dup
         cfg.connect do
           @app.call(env)
         end

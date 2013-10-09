@@ -8,7 +8,6 @@ module Alf
         Class.new(Sinatra::Base) do
           set :environment, :test
 
-          disable :dump_errors
           disable :logging
           disable :dump_errors
           enable  :raise_errors
@@ -22,8 +21,8 @@ module Alf
           end
 
           get '/check-config' do
-            check  = env[Alf::Rack::Connect::KEY].is_a?(Config)
-            check &= env[Alf::Rack::Connect::KEY] != class_config
+            check  = env[Alf::Rack::Connect::CONFIG_KEY].is_a?(Config)
+            check &= env[Alf::Rack::Connect::CONFIG_KEY] != class_config
             check.to_s
           end
 

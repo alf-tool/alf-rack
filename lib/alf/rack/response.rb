@@ -12,7 +12,8 @@ module Alf
     # use Alf::Rack::Connect{|cfg| ... }
     # 
     # get '/users' do
-    #   conn = env[Alf::Rack::Connect::KEY]
+    #   # get the connection (see Alf::Rack::Connect)
+    #   conn = ...
     #
     #   # The body relation/relvar will automatically be encoded to
     #   # whatever format the user want among the available ones.

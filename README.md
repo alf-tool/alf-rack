@@ -13,5 +13,5 @@ A collection of Rack middlewares for using Alf in web applications.
 
 ## Connect
 
-The `Connect` middleware opens a database connection and make it available
-under Alf::Rack::Connect::KEY in the rack environment. See Alf::Rack::Connect.
+The `Connect` middleware opens a database connection and make it available on
+the environment. See `Alf::Rack::Connect`.
