@@ -61,7 +61,7 @@ module Alf
       # Call on a duplicated instance
       def call(env)
         return NOT_FOUND unless env['REQUEST_METHOD'] == 'POST'
-        return NOT_FOUND unless env['PATH_INFO'] =~ /^\/(metadata)?$/
+        return NOT_FOUND unless env['PATH_INFO'] =~ /^(\/(metadata)?)?$/
         dup._call(env)
       end
 
@@ -91,7 +91,7 @@ module Alf
       # Executes the request
       def execute
         case env['PATH_INFO']
-        when '/'         then get_relvar
+        when '/', ''     then get_relvar
         when '/metadata' then metadata(get_relvar)
         end
       end

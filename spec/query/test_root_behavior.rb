@@ -16,9 +16,11 @@ module Alf
 
       let(:app){ mock_app }
 
-      subject{ post("/", body, {}) }
+      subject{ post(url, body, {}) }
 
       before{ subject }
+
+      let(:url){ '/' }
 
       context 'when the body contains a valid query' do
         let(:body){
@@ -39,6 +41,17 @@ module Alf
           body.size.should eq(2)
           body.map{|t| t["city"]}.uniq.should eq(["London"])
           body.map{|t| t["sid"]}.should eq(["S1", "S4"])
+        end
+      end
+
+      context 'when the url is empty' do
+        let(:url){ '' }
+        let(:body){
+          "restrict(suppliers, city: 'London')"
+        }
+
+        it 'succeeds' do
+          last_response.status.should eq(200)
         end
       end
 
