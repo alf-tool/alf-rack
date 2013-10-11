@@ -43,6 +43,9 @@ module Alf
       # Rack response when not found
       NOT_FOUND = [404, {}, []]
 
+      # Recognized URLs
+      RECOGNIZED_URLS_RX = /^(\/(data|metadata|logical|physical)?)?$/
+
       # Apply type checking (defaults to true)? 
       attr_accessor :type_check
       alias         :type_check? :type_check
@@ -61,7 +64,7 @@ module Alf
       # Call on a duplicated instance
       def call(env)
         return NOT_FOUND unless env['REQUEST_METHOD'] == 'POST'
-        return NOT_FOUND unless env['PATH_INFO'] =~ /^(\/(metadata)?)?$/
+        return NOT_FOUND unless env['PATH_INFO'] =~ RECOGNIZED_URLS_RX
         dup._call(env)
       end
 
@@ -91,26 +94,47 @@ module Alf
       # Executes the request
       def execute
         case env['PATH_INFO']
-        when '/', ''     then get_relvar
-        when '/metadata' then metadata(get_relvar)
+        when '', '/', '/data' then data
+        when '/metadata'      then metadata
+        when '/logical'       then logical_plan
+        when '/physical'      then physical_plan
         end
       end
 
-      def metadata(relvar)
-        keys = relvar.keys.to_a.map{|k| k.to_a }
-        heading = relvar.heading.to_hash.each_pair.map{|k,v|
-          {attribute: k, type: v.to_s}
-        }
-        {heading: Relation(heading), keys: keys}
+      def data
+        relvar(query)
       end
 
-      # Execute the request and returns the corresponding relvar
-      def get_relvar
-        query = env['rack.input'].read
-        query = check_safety(query)
-        query = parse_query(query)
-        query.type_check if type_check?
-        relvar(query)
+      def metadata
+        keys    = query.keys.to_a.map{|k| k.to_a }
+        heading = Relation(query.heading.to_hash.each_pair.map{|k,v|
+          {attribute: k, type: v.to_s}
+        })
+        {heading: heading, keys: keys}
+      end
+
+      def logical_plan
+        {
+          origin:    query.to_ascii_tree,
+          optimized: relvar(query).expr.to_ascii_tree
+        }
+      end
+
+      def physical_plan
+        {
+          plan: relvar(query).to_cog.to_ascii_tree
+        }
+      end
+
+      # Parse and type check the query from body input. Keep it under @query.
+      def query
+        @query ||= begin
+          query = env['rack.input'].read
+          query = check_safety(query)
+          query = parse_query(query)
+          query.type_check if type_check?
+          query
+        end
       end
 
       # Checks that `query` is sufficiently safe ruby code
