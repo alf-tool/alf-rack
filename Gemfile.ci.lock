@@ -1,5 +1,6 @@
-PATH
-  remote: ../alf-core
+GIT
+  remote: git://github.com/alf-tool/alf-core.git
+  revision: aaaa9a7894fcc5841ba79288dbb6656613c46676
   specs:
     alf-core (0.15.0)
       domain (~> 1.0)
@@ -7,23 +8,26 @@ PATH
       path (~> 1.3)
       sexpr (~> 0.6.0)
 
-PATH
-  remote: ../alf-sequel
+GIT
+  remote: git://github.com/alf-tool/alf-sequel.git
+  revision: 0e13b25600e62257823588c5b6f466c76db5115f
   specs:
     alf-sequel (0.15.0)
       alf-core (~> 0.15.0)
       alf-sql (~> 0.15.0)
       sequel (~> 4.2)
 
-PATH
-  remote: ../alf-sql
+GIT
+  remote: git://github.com/alf-tool/alf-sql.git
+  revision: fadecfa0b63220113adbe83174b486781be72405
   specs:
     alf-sql (0.15.0)
       alf-core (~> 0.15.0)
       sexpr (~> 0.6.0)
 
-PATH
-  remote: ../alf-test
+GIT
+  remote: git://github.com/alf-tool/alf-test.git
+  revision: d83036f523fe39109f2e5d4484cdf383542082dc
   specs:
     alf-test (0.15.0)
       alf-core (~> 0.15.0)
@@ -54,7 +58,7 @@ GEM
       diff-lcs (>= 1.1.3, < 2.0)
     rspec-mocks (2.14.3)
     ruby_cop (1.0.5)
-    sequel (4.3.0)
+    sequel (4.2.0)
     sexpr (0.6.0)
     sinatra (1.4.3)
       rack (~> 1.4)
