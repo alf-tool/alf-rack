@@ -5,14 +5,19 @@ require 'alf/rack/query'   # not required by default
 # to end-user queries in a simple way.
 #
 # IMPORTANT: Alf::Rack::Query MUST be considered unsafe, as it currently
-# relies on passing ruby code from the client to the server. We use RubyCop
-# to mitigate the risks, but until Alf has a true parser for relational
-# expressions, this scheme should not be used in unsafe environments.
+# relies on passing ruby code from the client to the server.
+# We use Parser::Safer to mitigate the risks, but until Alf has a true parser
+# for relational expressions, this scheme should probably not be used in
+# unsafe environments.
 QueryApp = ::Rack::Builder.new do
 
   # See 1-basic.rb
+  require 'alf/lang/parser/safer'
   use Alf::Rack::Connect do |cfg|
-    cfg.database = Alf::Test::Sap.adapter(:sqlite)
+    adapter = Alf::Test::Sap.adapter(:sqlite)
+    cfg.database = Alf::Database.new(adapter){|opt|
+      opt.parser = Alf::Lang::Parser::Safer
+    }
   end
 
   # This is the application. It reponds to POST requests and accept queries

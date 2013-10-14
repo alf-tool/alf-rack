@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'alf/rack/query'
+require 'alf/lang/parser/safer'
 module Alf
   module Rack
     describe Query, 'POST /' do
@@ -8,7 +9,9 @@ module Alf
       def mock_app(&bl)
         ::Rack::Builder.new do
           use Alf::Rack::Connect do |cfg|
-            cfg.database = Alf::Test::Sap.adapter(:sqlite)
+            cfg.database = Alf::Database.new(
+                             Alf::Test::Sap.adapter(:sqlite),
+                             parser: Alf::Lang::Parser::Safer)
           end
           run Alf::Rack::Query.new
         end
@@ -72,34 +75,12 @@ module Alf
         end
       end
 
-      context 'when the body contains a syntax error' do
-        let(:body){
-          "restrict(suppliers, city: 'Lond)"
-        }
-        let(:expected_message){
-          /syntax error/
-        }
-
-        it_should_behave_like "an invalid client request"
-      end
-
-      context 'when the body contains a semantic error' do
-        let(:body){
-          "restrict(supplrs, city: 'London')"
-        }
-        let(:expected_message){
-          /No such relvar `supplrs`/
-        }
-
-        it_should_behave_like "an invalid client request"
-      end
-
       context 'when the body contains an attack attempt' do
         let(:body){
           "`ls -lA`"
         }
         let(:expected_message){
-          /Invalid query '`ls -lA`'/
+          /Forbidden/
         }
 
         it_should_behave_like "an invalid client request"

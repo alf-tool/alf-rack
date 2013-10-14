@@ -6,12 +6,10 @@ module Alf
     # queries on the current connection and encodes the result according to
     # the HTTP_ACCEPT header.
     #
-    # IMPORTANT: until Alf gains a true parser for algebra expressions, you
-    # should avoid using this class in unsafe environments. Indeed, only
-    # queries in the Ruby DSL are supported for now, and the ruby engine is
-    # used to parse them, which must be considered dangerous. We use RubyCop
-    # to mitigate the risks but cannot ensure that all attack vectors are
-    # removed.
+    # IMPORTANT: Alf has no true parser for now. In order to mitigate the risk
+    # of exposing serious attack vectors, you MUST take care of installing the
+    # safer parser on your database, as illustrated below. This seriously makes
+    # attacks harder, unfortunately without any guarantee...
     #
     # By default, this class catches all errors (e.g. syntax, type-checking
     # security, runtime query execution) and return a 400 response with the
@@ -26,9 +24,15 @@ module Alf
     # ```
     # # in a config.ru or something
     #
-    # # connect as usual
+    # # Create a database with a safer parser than usual
+    # require 'alf/lang/parser/safer'
+    # DB = Alf::Database.new(...){|opts|
+    #   opts.parser = Alf::Lang::Parser::Safer
+    # }
+    #
+    # Connect the database on every request
     # use Alf::Rack::Connect{|cfg|
-    #   cfg.database = ...
+    #   cfg.database = DB
     # } 
     #
     # # let the query engine run under '/'
@@ -130,26 +134,10 @@ module Alf
       def query
         @query ||= begin
           query = env['rack.input'].read
-          query = check_safety(query)
-          query = parse_query(query)
+          query = alf_connection.parse(query)
           query.type_check if type_check?
           query
         end
-      end
-
-      # Checks that `query` is sufficiently safe ruby code
-      def check_safety(query)
-        policy = RubyCop::Policy.new
-        ast    = RubyCop::NodeBuilder.build(query)
-        raise QueryError, "Invalid query '#{query}'" unless ast.accept(policy)
-        query
-      rescue SyntaxError => ex
-        raise QueryError, ex.message
-      end
-
-      # Parse the query using Alf and returns the expression tree
-      def parse_query(query)
-        alf_connection.parse(query)
       end
 
     end # class Query
