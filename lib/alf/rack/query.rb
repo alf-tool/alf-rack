@@ -87,7 +87,6 @@ module Alf
       # strategy
       def safe(response)
         result = yield
-        result.to_a if catch_all?
         response.body = result
       rescue => ex
         raise unless catch_all?
@@ -106,7 +105,7 @@ module Alf
       end
 
       def data
-        relvar(query)
+        relvar(query).value
       end
 
       def metadata
