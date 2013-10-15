@@ -17,13 +17,13 @@ class BasicApp < Sinatra::Base
     context.media_types = Alf::Rack::Response.supported_media_types
   end
 
-  # Let connect to the suppliers and parts examplar that comes with Alf::Test.
+  # Let connect to the suppliers and parts examplar.
   #
   # This sets a config object on the Rack env object, under
   # Alf::Rack::Connect::CONFIG_KEY. That config object will have an open
   # connection at request time.
   use Alf::Rack::Connect do |cfg|
-    cfg.database = Alf::Test::Sap.adapter(:sqlite)
+    cfg.database = Path.dir/"sap.db"
   end
 
   # Let serve the list of suppliers

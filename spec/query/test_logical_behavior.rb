@@ -6,9 +6,10 @@ module Alf
       include ::Rack::Test::Methods
 
       def mock_app(&bl)
+        sap = self.sap
         ::Rack::Builder.new do
           use Alf::Rack::Connect do |cfg|
-            cfg.database = Alf::Test::Sap.adapter(:sqlite)
+            cfg.database = sap
           end
           run Alf::Rack::Query.new
         end

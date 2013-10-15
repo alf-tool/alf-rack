@@ -7,11 +7,10 @@ module Alf
       include ::Rack::Test::Methods
 
       def mock_app(&bl)
+        sap = self.sap
         ::Rack::Builder.new do
           use Alf::Rack::Connect do |cfg|
-            cfg.database = Alf::Database.new(
-                             Alf::Test::Sap.adapter(:sqlite),
-                             parser: Alf::Lang::Parser::Safer)
+            cfg.database = Alf::Database.new(sap, parser: Alf::Lang::Parser::Safer)
           end
           run Alf::Rack::Query.new
         end

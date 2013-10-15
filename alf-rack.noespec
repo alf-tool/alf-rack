@@ -33,7 +33,6 @@ variables:
     - {name: path,            version: "~> 1.3",    groups: [development]}
     - {name: sinatra,         version: "~> 1.4",    groups: [development]}
     - {name: rack-test,       version: "~> 0.6.2",  groups: [development]}
-    - {name: alf-test,        version: "~> 0.15.0", groups: [development]}
     - {name: alf-sequel,      version: "~> 0.15.0", groups: [development]}
     - {name: sequel,          version: "~> 4.2",    groups: [development]}
     - {name: sqlite3,         version: "~> 1.3",    groups: [development]}

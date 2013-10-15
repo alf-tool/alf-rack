@@ -1,5 +1,4 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require 'alf-test'
 require 'alf-rack'
 require 'alf-sequel'
 require "rspec"
@@ -11,10 +10,13 @@ require 'path'
 
 module Helpers
 
+  def sap
+    Alf::Adapter.factor Path.dir/"sap.db"
+  end
+
 end
 
 RSpec.configure do |c|
   c.include Helpers
   c.extend  Helpers
-  c.filter_run_excluding :ruby19 => (RUBY_VERSION < "1.9")
 end

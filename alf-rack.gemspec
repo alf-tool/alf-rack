@@ -18,7 +18,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency("path", "~> 1.3")
   s.add_development_dependency("sinatra", "~> 1.4")
   s.add_development_dependency("rack-test", "~> 0.6.2")
-  s.add_development_dependency("alf-test", "~> 0.15.0")
   s.add_development_dependency("alf-sequel", "~> 0.15.0")
   s.add_development_dependency("sequel", "~> 4.2")
   s.add_development_dependency("sqlite3", "~> 1.3")

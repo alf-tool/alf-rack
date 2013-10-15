@@ -14,8 +14,7 @@ QueryApp = ::Rack::Builder.new do
   # See 1-basic.rb
   require 'alf/lang/parser/safer'
   use Alf::Rack::Connect do |cfg|
-    adapter = Alf::Test::Sap.adapter(:sqlite)
-    cfg.database = Alf::Database.new(adapter){|opt|
+    cfg.database = Alf::Database.new(Path.dir/"sap.db"){|opt|
       opt.parser = Alf::Lang::Parser::Safer
     }
   end

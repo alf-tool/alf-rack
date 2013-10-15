@@ -18,7 +18,6 @@ group :development do
   gem "jdbc-sqlite3", "~> 3.7", :platforms => ['jruby']
   gem "sequel", "~> 4.2"
 
-  gem "alf-test",   path: "../alf-test"
   gem "alf-sql",    path: "../alf-sql"
   gem "alf-sequel", path: "../alf-sequel"
 end
