@@ -106,8 +106,7 @@ module Alf
       end
 
       def data
-        parsed = query(false)
-        parsed.is_a?(Algebra::Operand) ? relvar(parsed) : {result: parsed}
+        relvar(query)
       end
 
       def metadata
@@ -134,16 +133,14 @@ module Alf
         }
       end
 
-      def query(relational_only = true)
+      def query
         query = env['rack.input'].read
         query = alf_connection.parse(query)
         if query.is_a?(Algebra::Operand)
           query.type_check if type_check?
           query
-        elsif relational_only
-          raise QueryError, "Not a relational expression"
         else
-          query
+          raise QueryError, "Not a relational expression"
         end
       end
 
