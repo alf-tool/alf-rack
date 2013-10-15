@@ -92,7 +92,7 @@ module Alf
       rescue => ex
         raise unless catch_all?
         response.status = 400
-        response.body = {"error" => "#{ex.class}: #{ex.message}" }
+        response.body = { "error" => "#{ex.class}: #{ex.message}" }
       end
 
       # Executes the request
@@ -106,36 +106,43 @@ module Alf
       end
 
       def data
-        relvar(query)
+        parsed = query(false)
+        parsed.is_a?(Algebra::Operand) ? relvar(parsed) : {result: parsed}
       end
 
       def metadata
-        keys    = query.keys.to_a.map{|k| k.to_a }
-        heading = Relation(query.heading.to_hash.each_pair.map{|k,v|
+        q       = query
+        keys    = q.keys.to_a.map{|k| k.to_a }
+        heading = Relation(q.heading.to_hash.each_pair.map{|k,v|
           {attribute: k, type: v.to_s}
         })
         {heading: heading, keys: keys}
       end
 
       def logical_plan
+        q = query
         {
-          origin:    query.to_ascii_tree,
-          optimized: relvar(query).expr.to_ascii_tree
+          origin:    q.to_ascii_tree,
+          optimized: relvar(q).expr.to_ascii_tree
         }
       end
 
       def physical_plan
+        q = query
         {
-          plan: relvar(query).to_cog.to_ascii_tree
+          plan: relvar(q).to_cog.to_ascii_tree
         }
       end
 
-      # Parse and type check the query from body input. Keep it under @query.
-      def query
-        @query ||= begin
-          query = env['rack.input'].read
-          query = alf_connection.parse(query)
+      def query(relational_only = true)
+        query = env['rack.input'].read
+        query = alf_connection.parse(query)
+        if query.is_a?(Algebra::Operand)
           query.type_check if type_check?
+          query
+        elsif relational_only
+          raise QueryError, "Not a relational expression"
+        else
           query
         end
       end
