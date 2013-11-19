@@ -16,7 +16,7 @@ variables:
   upper:
     Rack
   version:
-    0.15.0
+    0.16.0
   summary:
     A collection of Rack middlewares for using Alf in web applications
   description: |-
