@@ -4,6 +4,8 @@ template-info:
   manifest:
     Gemfile:
       safe-override: false
+    Gemfile.ci:
+      safe-override: false
     lib/alf/__lower__/loader.rb:
       safe-override: false
     tasks/test.rake:
@@ -28,13 +30,14 @@ variables:
   dependencies:
     - {name: rack,            version: "~> 1.5",    groups: [runtime]}
     - {name: rack-accept,     version: "~> 0.4.5",  groups: [runtime]}
-    - {name: alf-core,        version: "~> 0.15.0", groups: [runtime]}
     - {name: ruby_cop,        version: "~> 1.0",    groups: [runtime]}
     - {name: path,            version: "~> 1.3",    groups: [development]}
     - {name: sinatra,         version: "~> 1.4",    groups: [development]}
     - {name: rack-test,       version: "~> 0.6.2",  groups: [development]}
-    - {name: alf-sequel,      version: "~> 0.15.0", groups: [development]}
     - {name: sequel,          version: "~> 4.2",    groups: [development]}
     - {name: sqlite3,         version: "~> 1.3",    groups: [development]}
     - {name: rake,            version: "~> 10.1",   groups: [development]}
     - {name: rspec,           version: "~> 2.14",   groups: [development]}
+  depends:
+    - {name: alf-core,   groups: [runtime]}
+    - {name: alf-sequel, groups: [development]}
