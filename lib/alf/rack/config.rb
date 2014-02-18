@@ -9,7 +9,10 @@ module Alf
       option :connection_options, Hash, {}
 
       # Enclose all requests in a single database transaction?
-      option :transactional, Boolean, false
+      option :transactional, Boolean, true
+
+      # Transaction options to use
+      option :transaction_options, Hash, {}
 
       # Sets the database, coercing it if required
       def database=(db)
@@ -43,7 +46,7 @@ module Alf
         database.connect(connection_options) do |conn|
           @connection = conn
           if transactional?
-            conn.in_transaction{ yield(conn) }
+            conn.in_transaction(transaction_options){ yield(conn) }
           else
             yield(conn)
           end
