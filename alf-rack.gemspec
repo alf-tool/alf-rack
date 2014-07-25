@@ -24,10 +24,10 @@ Gem::Specification.new do |s|
   s.add_development_dependency("sqlite3", "~> 1.3")
   s.add_development_dependency("rake", "~> 10.1")
   s.add_development_dependency("rspec", "~> 2.14")
-  s.add_development_dependency("alf-sequel", "0.16.1")
+  s.add_development_dependency("alf-sequel", "0.16.2")
   s.add_dependency("rack", "~> 1.5")
   s.add_dependency("rack-accept", "~> 0.4.5")
   s.add_dependency("ruby_cop", "~> 1.0")
-  s.add_dependency("alf-core", "0.16.1")
+  s.add_dependency("alf-core", "0.16.2")
 
 end
