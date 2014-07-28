@@ -33,7 +33,7 @@ end
 get '/suppliers' do |id|
   Alf::Rack::Response.new{|r|
     r.body = relvar{ suppliers }
-  end
+  }.finish
 end
 
 # Similar for a single supplier tuple
@@ -41,7 +41,7 @@ get '/suppliers/:id' do |id|
   # Find the supplier
   Alf::Rack::Response.new{|r|
     r.body = tuple_extract{ restrict(suppliers, sid: id) }
-  end
+  }.finish
 end
 ```
 
